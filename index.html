@@ -78,6 +78,9 @@ body.sc .rv{opacity:0}
 
 /* ===== ACT 1 : ÜRETİCİ (parallax hero) ===== */
 .hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden}
+.hero-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;background:var(--surface-2)}
+.hero-scrim{position:absolute;inset:0;z-index:1;background:linear-gradient(95deg,var(--canvas) 0%,color-mix(in srgb,var(--canvas) 90%,transparent) 30%,color-mix(in srgb,var(--canvas) 58%,transparent) 58%,color-mix(in srgb,var(--canvas) 20%,transparent) 100%)}
+.hero::after{content:"";position:absolute;left:0;right:0;bottom:0;height:24%;z-index:1;background:linear-gradient(color-mix(in srgb,var(--canvas) 0%,transparent),var(--canvas));pointer-events:none}
 .hero .plane{position:absolute;inset:0;will-change:transform}
 .hero .p-glow{background:radial-gradient(60% 55% at 72% 32%,var(--accent-soft),transparent 70%)}
 .hero .p-grid{background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:72px 72px;opacity:.35;-webkit-mask-image:radial-gradient(120% 100% at 70% 30%,#000,transparent 66%);mask-image:radial-gradient(120% 100% at 70% 30%,#000,transparent 66%)}
@@ -209,6 +212,7 @@ footer{border-top:1px solid var(--line);background:var(--surface);padding:44px 0
   .wrap{padding:0 22px}
   header{padding:0 22px}
   .rail{display:none}
+  .hero-scrim{background:linear-gradient(to bottom,color-mix(in srgb,var(--canvas) 88%,transparent),color-mix(in srgb,var(--canvas) 70%,transparent))}
   .hero-inner,.tech-grid,.tgrid,.ogrid{grid-template-columns:1fr;gap:30px}
   .facade{order:-1;max-width:360px;margin:0 auto}
   .facade .float{display:none}
@@ -256,8 +260,8 @@ footer{border-top:1px solid var(--line);background:var(--surface);padding:44px 0
 
 <!-- ============ ACT 1 : ÜRETİCİ ============ -->
 <section class="act hero" id="uretici">
-  <div class="plane p-grid" data-depth="0.2"></div>
-  <div class="plane p-glow" data-depth="0.5"></div>
+  <video class="hero-video" autoplay muted loop playsinline preload="auto"><source src="hero.mp4" type="video/mp4"></video>
+  <div class="hero-scrim"></div>
   <div class="wrap hero-inner">
     <div class="hero-copy">
       <div class="station kick">Üretici · Afyonkarahisar</div>
@@ -270,19 +274,7 @@ footer{border-top:1px solid var(--line);background:var(--surface);padding:44px 0
         <a href="#teklif" class="btn btn-ghost">Teklif Alın</a>
       </div>
     </div>
-    <div class="facade" aria-hidden="true">
-      <div class="ring">
-        <div class="grid2">
-          <div class="pane big"><span class="t">PVC Doğrama</span></div>
-          <div class="pane"><span class="t">Isıcam</span></div>
-          <div class="pane hot"><span class="t">Cephe</span></div>
-          <div class="pane"><span class="t">Alüminyum</span></div>
-          <div class="pane"><span class="t">Kapı</span></div>
-        </div>
-      </div>
-      <div class="float f1"><div class="n"><span>1.25M</span> m²</div><div class="l">yıllık ısıcam</div></div>
-      <div class="float f2"><div class="n">29.000 m²</div><div class="l">üretim tesisi</div></div>
-    </div>
+    <!-- hero background is video (hero.mp4) -->
   </div>
 </section>
 
@@ -496,6 +488,7 @@ footer{border-top:1px solid var(--line);background:var(--surface);padding:44px 0
 <script>
 (function(){
   var reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if(reduce){var _hv=document.querySelector(".hero-video");if(_hv){_hv.removeAttribute("autoplay");try{_hv.pause();}catch(e){}}}
   var header=document.getElementById("header");
   window.addEventListener("scroll",function(){header.classList.toggle("solid",window.scrollY>40);},{passive:true});
 
@@ -565,13 +558,7 @@ footer{border-top:1px solid var(--line);background:var(--surface);padding:44px 0
   // ACT1 hero parallax
   var mm=gsap.matchMedia();
   mm.add("(min-width:901px)",function(){
-    document.querySelectorAll(".hero .plane").forEach(function(pl){
-      var d=parseFloat(pl.getAttribute("data-depth"))||.3;
-      gsap.to(pl,{yPercent:d*30,ease:"none",scrollTrigger:{trigger:"#uretici",start:"top top",end:"bottom top",scrub:true}});
-    });
-    gsap.to(".facade .ring",{yPercent:-8,ease:"none",scrollTrigger:{trigger:"#uretici",start:"top top",end:"bottom top",scrub:true}});
-    gsap.to(".facade .f1",{yPercent:-40,ease:"none",scrollTrigger:{trigger:"#uretici",start:"top top",end:"bottom top",scrub:1}});
-    gsap.to(".facade .f2",{yPercent:34,ease:"none",scrollTrigger:{trigger:"#uretici",start:"top top",end:"bottom top",scrub:1}});
+    gsap.to(".hero-video",{scale:1.14,ease:"none",transformOrigin:"center center",scrollTrigger:{trigger:"#uretici",start:"top top",end:"bottom top",scrub:true}});
 
     // ACT2 pinned cross-section (SIGNATURE MOVE / PEAK)
     var secG=document.getElementById("section");
