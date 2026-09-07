@@ -1,0 +1,604 @@
+<title>Önder Group Showroom</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@600;700;800;900&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+
+<style>
+:root{
+  --canvas:#FCFCFB; --surface:#FFFFFF; --surface-2:#F5F5F2; --raise:#EEEEEA;
+  --ink:#1A1A17; --ink-soft:#57574F; --muted:#93938A; --line:#ECECE7; --line-2:#DEDED8;
+  --accent:#E9640E; --accent-2:#BE4E05; --accent-soft:rgba(233,100,14,.08);
+  --glass:#5B9BA6; --glass-soft:rgba(91,155,166,.12);
+  --f-display:"Archivo",system-ui,sans-serif;
+  --f-body:"Manrope",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --wrap:1280px;
+  --shadow:0 18px 44px -30px rgba(26,26,20,.20);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--canvas)}
+body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--f-body);font-size:1.02rem;line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+h1,h2,h3,h4{font-family:var(--f-display);font-weight:800;line-height:1.02;margin:0;letter-spacing:-.025em;text-wrap:balance}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--wrap);margin:0 auto;padding:0 40px}
+.station{font-family:var(--f-mono);font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--accent);font-weight:600}
+.mono{font-family:var(--f-mono)}
+.tab{font-variant-numeric:tabular-nums}
+:focus-visible{outline:2.5px solid var(--accent);outline-offset:3px;border-radius:4px}
+.btn{display:inline-flex;align-items:center;gap:9px;font-family:var(--f-body);font-weight:700;font-size:.95rem;padding:14px 24px;border-radius:11px;cursor:pointer;border:1.5px solid transparent;transition:transform .15s,background .2s,border-color .2s,color .2s;white-space:nowrap}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--accent);color:#160A02;box-shadow:0 12px 30px -12px var(--accent)}
+.btn-primary:hover{background:#ff7d36;transform:translateY(-2px)}
+.btn-ghost{background:transparent;border-color:var(--line-2);color:var(--ink)}
+.btn-ghost:hover{border-color:var(--accent);color:var(--accent)}
+.hero-sub2{font-family:var(--f-display);font-weight:700;font-size:clamp(1.15rem,2vw,1.75rem);color:var(--ink-soft);margin-top:16px;letter-spacing:-.01em}
+.wa-btn{background:#25D366;color:#08240F;border:none;box-shadow:0 12px 30px -12px rgba(37,211,102,.6)}
+.wa-btn:hover{background:#2bdd6f;transform:translateY(-2px);color:#08240F}
+.wa-btn svg{width:20px;height:20px}
+.wa-float{position:fixed;right:22px;bottom:22px;z-index:95;width:60px;height:60px;border-radius:50%;background:#25D366;display:flex;align-items:center;justify-content:center;box-shadow:0 14px 34px -8px rgba(37,211,102,.65);transition:transform .2s}
+.wa-float:hover{transform:scale(1.08)}
+.wa-float svg{width:32px;height:32px;color:#fff}
+.wa-float .ping{position:absolute;inset:0;border-radius:50%;border:2px solid #25D366;animation:waPing 2.4s ease-out infinite}
+@keyframes waPing{0%{transform:scale(1);opacity:.7}100%{transform:scale(1.6);opacity:0}}
+@media (max-width:900px){.wa-float{right:16px;bottom:16px;width:54px;height:54px}.wa-float svg{width:28px;height:28px}}
+@media (prefers-reduced-motion:reduce){.wa-float .ping{display:none}}
+
+/* ===== HEADER ===== */
+header{position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;height:70px;padding:0 40px;background:linear-gradient(var(--canvas),transparent);transition:background .3s}
+header.solid{background:color-mix(in srgb,var(--canvas) 88%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.brand{display:flex;flex-direction:column;gap:2px;line-height:1}
+.brand .wm{font-family:var(--f-display);font-weight:900;font-size:1.4rem;letter-spacing:-.03em}
+.brand .wm .o{color:var(--accent)} .brand .wm .g{color:var(--ink)}
+.brand .tg{font-family:var(--f-mono);font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+header .cta{margin-left:auto}
+
+/* ===== JOURNEY RAIL ===== */
+.rail{position:fixed;top:50%;right:26px;transform:translateY(-50%);z-index:75;display:flex;flex-direction:column;gap:2px}
+.rail a{display:flex;align-items:center;gap:12px;justify-content:flex-end;padding:7px 0;color:var(--muted);cursor:pointer;transition:color .25s}
+.rail a .lbl{font-family:var(--f-mono);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;opacity:0;transform:translateX(6px);transition:opacity .25s,transform .25s}
+.rail a .pip{width:26px;height:2px;background:var(--line-2);border-radius:2px;transition:background .25s,width .25s}
+.rail a:hover .lbl{opacity:1;transform:none}
+.rail a.on{color:var(--ink)}
+.rail a.on .lbl{opacity:1;transform:none}
+.rail a.on .pip{background:var(--accent);width:40px}
+.rail .idx{font-family:var(--f-mono);font-size:.6rem;color:var(--muted);width:16px;text-align:right}
+.rail a.on .idx{color:var(--accent)}
+
+/* ===== ACT SHELL ===== */
+.act{position:relative}
+.head-xl{font-size:clamp(2.1rem,4.4vw,3.6rem);font-weight:900}
+.lead{color:var(--ink-soft);font-size:1.16rem;max-width:52ch;margin-top:20px;line-height:1.6}
+
+/* reveal helper */
+.rv{opacity:1}
+body.sc .rv{opacity:0}
+
+/* ===== ACT 1 : ÜRETİCİ (parallax hero) ===== */
+.hero{position:relative;min-height:100svh;display:flex;align-items:center;overflow:hidden}
+.hero .plane{position:absolute;inset:0;will-change:transform}
+.hero .p-glow{background:radial-gradient(60% 55% at 72% 32%,var(--accent-soft),transparent 70%)}
+.hero .p-grid{background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);background-size:72px 72px;opacity:.35;-webkit-mask-image:radial-gradient(120% 100% at 70% 30%,#000,transparent 66%);mask-image:radial-gradient(120% 100% at 70% 30%,#000,transparent 66%)}
+.hero-inner{position:relative;z-index:3;display:grid;grid-template-columns:1.06fr .94fr;gap:48px;align-items:center;width:100%;padding-top:70px}
+.hero h1{font-size:clamp(2.9rem,6vw,5.3rem);font-weight:900}
+.hero h1 .hl{color:var(--accent)}
+.hero .kick{margin-bottom:20px}
+.hero .lead{font-size:1.2rem}
+.hero-actions{display:flex;gap:14px;margin-top:34px;flex-wrap:wrap}
+/* layered facade */
+.facade{position:relative;aspect-ratio:1/1;max-width:520px;margin-left:auto;will-change:transform}
+.facade .ring{position:absolute;inset:0;border-radius:26px;border:1px solid var(--line-2);background:linear-gradient(150deg,var(--surface),var(--surface-2));box-shadow:var(--shadow);overflow:hidden}
+.facade .grid2{position:absolute;inset:11%;display:grid;grid-template-columns:1.25fr 1fr;grid-template-rows:1fr 1fr 1.1fr;gap:12px}
+.pane{border-radius:9px;border:1px solid var(--line-2);background:linear-gradient(150deg,var(--glass-soft),var(--surface));position:relative;overflow:hidden}
+.pane::after{content:"";position:absolute;top:-40%;left:-30%;width:44%;height:200%;transform:rotate(20deg);background:linear-gradient(90deg,transparent,rgba(255,255,255,.5),transparent)}
+.pane.big{grid-row:span 2}
+.pane.hot{background:var(--accent);border-color:var(--accent-2)}
+.pane .t{position:absolute;left:12px;bottom:10px;font-family:var(--f-mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.pane.hot .t{color:#180a02;font-weight:600}
+.facade .float{position:absolute;background:var(--surface);border:1px solid var(--line-2);border-radius:12px;padding:12px 16px;box-shadow:var(--shadow);will-change:transform}
+.facade .f1{right:-6%;top:14%}
+.facade .f2{left:-8%;bottom:16%}
+.float .n{font-family:var(--f-display);font-weight:900;font-size:1.3rem;color:var(--ink)}
+.float .n span{color:var(--accent)}
+.float .l{font-family:var(--f-mono);font-size:.58rem;letter-spacing:.06em;color:var(--muted);margin-top:2px}
+
+/* ÜRETİM GÜCÜMÜZ */
+.power{border-top:1px solid var(--line);border-bottom:1px solid var(--line);background:var(--surface);padding:clamp(46px,6vw,74px) 0}
+.power-head{margin-bottom:36px}
+.power-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:30px}
+.pcell{display:flex;flex-direction:column;align-items:flex-start}
+.pcell .pic{width:30px;height:30px;color:var(--accent);margin-bottom:18px}
+.pcell .pic svg{width:100%;height:100%;display:block}
+.pcell .n{font-family:var(--f-display);font-weight:900;font-size:clamp(1.4rem,1.9vw,1.95rem);letter-spacing:-.03em;line-height:1.05}
+.pcell .n span{color:var(--accent)}
+.pcell .l{color:var(--muted);font-size:.84rem;margin-top:10px;line-height:1.35}
+
+/* ===== ACT 2 : TEKNOLOJİ (pinned cross-section) ===== */
+.tech{background:var(--canvas)}
+.tech-pin{min-height:100svh;display:flex;align-items:center;position:relative;overflow:hidden}
+.tech-grid{display:grid;grid-template-columns:.82fr 1.18fr;gap:56px;align-items:center;width:100%}
+.tech h2{font-size:clamp(2rem,3.6vw,3.1rem)}
+.tech .lead{margin-top:18px}
+.cut{position:relative;aspect-ratio:16/11;border-radius:18px;border:1px solid var(--line-2);background:radial-gradient(120% 120% at 30% 20%,var(--surface-2),var(--surface));overflow:hidden;box-shadow:var(--shadow)}
+.cut svg{position:absolute;inset:0;width:100%;height:100%}
+.cutline{position:absolute;top:0;bottom:0;width:2px;background:var(--accent);box-shadow:0 0 22px var(--accent);left:50%}
+.cutline::before{content:"KESİT";position:absolute;top:14px;left:8px;font-family:var(--f-mono);font-size:.58rem;letter-spacing:.2em;color:var(--accent);background:var(--canvas);padding:2px 6px;border-radius:4px}
+.clabel{position:absolute;font-family:var(--f-mono);font-size:.66rem;letter-spacing:.04em;color:var(--ink);background:color-mix(in srgb,var(--canvas) 78%,transparent);border:1px solid var(--line-2);border-radius:7px;padding:6px 9px;backdrop-filter:blur(4px)}
+.clabel b{color:var(--accent);display:block;font-family:var(--f-body);font-weight:700;font-size:.72rem;margin-bottom:1px}
+
+/* ===== generic section ===== */
+.sec{padding:clamp(80px,11vw,150px) 0}
+
+/* ===== ACT 3 : KALİTE (reveal) ===== */
+.quality{background:var(--surface);position:relative;overflow:hidden}
+.q-motto{font-size:clamp(2.2rem,5.4vw,4.6rem);font-weight:900;line-height:1.02;max-width:16ch}
+.q-motto .hl{color:var(--accent)}
+.q-clip{clip-path:inset(0 100% 0 0)}
+.q-list{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;margin-top:52px;background:var(--line);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.q-item{background:var(--surface);padding:26px 28px}
+.q-item .k{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.14em;color:var(--accent);text-transform:uppercase}
+.q-item h3{font-size:1.15rem;margin-top:12px}
+.q-item p{color:var(--muted);font-size:.92rem;margin-top:8px}
+
+/* ===== ACT 4 : PROJE (horizontal pan) ===== */
+.projwrap{position:relative;overflow:hidden;background:var(--canvas)}
+.projtrack{display:flex;gap:24px;padding:0 40px;will-change:transform}
+.pintro{flex:none;width:min(38vw,440px);display:flex;flex-direction:column;justify-content:center}
+.pcard{flex:none;width:min(30vw,380px);aspect-ratio:3/4;border-radius:18px;border:1px solid var(--line-2);background:linear-gradient(160deg,var(--surface-2),var(--surface));position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:flex-end;padding:26px}
+.pcard .ph{position:absolute;inset:0;background:repeating-linear-gradient(135deg,transparent,transparent 24px,var(--line) 24px,var(--line) 25px);opacity:.4}
+.pcard .glow{position:absolute;width:60%;height:55%;top:-8%;left:-8%;background:radial-gradient(circle,var(--accent-soft),transparent 70%)}
+.pcard .slot{position:absolute;top:16px;left:16px;font-family:var(--f-mono);font-size:.58rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border:1px dashed var(--line-2);border-radius:6px;padding:4px 8px}
+.pcard .tag{position:relative;font-family:var(--f-mono);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.pcard h3{position:relative;font-size:1.25rem;margin-top:8px}
+.pcard p{position:relative;color:var(--muted);font-size:.88rem;margin-top:6px}
+
+/* ===== ACT 5 : GÜVEN (export/trust) ===== */
+.trust{background:var(--surface);position:relative;overflow:hidden}
+.trust .glow{position:absolute;width:46%;height:120%;top:-10%;right:-6%;background:radial-gradient(circle,var(--accent-soft),transparent 66%)}
+.trust .wrap{position:relative;z-index:2}
+.tgrid{display:grid;grid-template-columns:1.1fr .9fr;gap:52px;align-items:center;margin-top:8px}
+.export-h{font-size:clamp(2rem,4vw,3.2rem);font-weight:900}
+.export-h .hl{color:var(--accent)}
+.tpoints{margin-top:30px;display:grid;gap:1px;background:var(--line);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.tp{background:var(--surface);padding:20px 22px;display:flex;gap:16px;align-items:flex-start}
+.tp .en{font-family:var(--f-mono);color:var(--accent);font-weight:600;font-size:.82rem;padding-top:2px}
+.tp b{display:block;font-weight:700;font-size:1.02rem}
+.tp span{color:var(--muted);font-size:.9rem}
+.afcam{background:linear-gradient(150deg,var(--surface-2),var(--surface));border:1px solid var(--line-2);border-radius:20px;padding:38px;box-shadow:var(--shadow)}
+.afcam .mk{font-family:var(--f-display);font-weight:900;font-size:2.9rem;letter-spacing:-.02em}
+.afcam .mk span{color:var(--accent)}
+.afcam .sub{font-family:var(--f-mono);font-size:.7rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:6px}
+.afcam p{color:var(--ink-soft);margin-top:18px;font-size:.96rem}
+.afcam .note{margin-top:18px;padding-top:16px;border-top:1px solid var(--line);font-family:var(--f-mono);font-size:.7rem;color:var(--muted)}
+.partners{display:flex;flex-wrap:wrap;gap:12px;margin-top:26px}
+.pb{background:var(--surface);border:1px solid var(--line-2);border-radius:11px;padding:14px 18px}
+.pb .nm{font-family:var(--f-display);font-weight:800;font-size:1.05rem}
+.pb .ds{color:var(--muted);font-size:.78rem;margin-top:3px}
+
+/* ===== ACT 6 : TEKLİF ===== */
+.offer{background:var(--canvas);position:relative}
+.ogrid{display:grid;grid-template-columns:.95fr 1.05fr;gap:52px;margin-top:8px}
+.cinfo .row{padding:18px 0;border-bottom:1px solid var(--line);display:grid;grid-template-columns:110px 1fr;gap:14px}
+.cinfo .row:first-child{border-top:1px solid var(--line)}
+.cinfo .k{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding-top:3px}
+.cinfo .v{color:var(--ink)}
+.cinfo .v small{display:block;color:var(--muted);font-size:.82rem;margin-top:3px}
+form{background:var(--surface);border:1px solid var(--line-2);border-radius:20px;padding:32px}
+.f-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+label{display:block;font-size:.82rem;font-weight:700;margin:16px 0 7px;color:var(--ink-soft)}
+.f-row>div>label{margin-top:0}
+.field{width:100%;background:var(--canvas);border:1.5px solid var(--line-2);border-radius:11px;padding:12px 14px;font-family:var(--f-body);font-size:.96rem;color:var(--ink);transition:border-color .2s,box-shadow .2s}
+.field:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+textarea.field{min-height:100px;resize:vertical}
+select.field{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23727880' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:40px}
+form .btn-primary{width:100%;justify-content:center;margin-top:22px;padding:15px}
+.f-note{font-family:var(--f-mono);font-size:.72rem;color:var(--muted);margin-top:14px;text-align:center}
+.f-ok{display:none;text-align:center;padding:34px 12px}
+.f-ok svg{width:46px;height:46px;color:var(--accent);margin-bottom:12px}
+.f-ok h3{font-size:1.35rem;margin-bottom:8px}.f-ok p{color:var(--muted)}
+
+/* ===== FOOTER ===== */
+footer{border-top:1px solid var(--line);background:var(--surface);padding:44px 0 30px}
+.foot{display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;align-items:center}
+.foot .mono{font-size:.76rem;color:var(--muted)}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width:900px){
+  .wrap{padding:0 22px}
+  header{padding:0 22px}
+  .rail{display:none}
+  .hero-inner,.tech-grid,.tgrid,.ogrid{grid-template-columns:1fr;gap:30px}
+  .facade{order:-1;max-width:360px;margin:0 auto}
+  .facade .float{display:none}
+  .power-grid{grid-template-columns:repeat(3,1fr);gap:26px 20px}
+  .q-list{grid-template-columns:1fr}
+  .projtrack{flex-direction:column;padding:0 22px}
+  .pintro,.pcard{width:100%}
+  .pcard{aspect-ratio:16/10}
+  .f-row{grid-template-columns:1fr}
+}
+@media (max-width:600px){
+  .power-grid{grid-template-columns:1fr 1fr;gap:24px 18px}
+  .cinfo .row{grid-template-columns:1fr;gap:3px}
+}
+.mobile-progress{display:none}
+@media (max-width:900px){
+  .mobile-progress{display:block;position:fixed;top:0;left:0;height:3px;background:var(--accent);z-index:90;width:0}
+}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *{animation:none!important;transition:none!important}
+  body.sc .rv{opacity:1!important;transform:none!important}
+  .q-clip{clip-path:none!important}
+}
+</style>
+
+<div class="mobile-progress" id="mprog"></div>
+
+<header id="header">
+  <a href="#uretici" class="brand" aria-label="Önder Group">
+    <span class="wm"><span class="o">önder</span><span class="g">group</span></span>
+    <span class="tg">Başarımızın Kaynağı Kalitemizden</span>
+  </a>
+  <a href="#teklif" class="btn btn-primary cta">Teklif Alın</a>
+</header>
+
+<nav class="rail" id="rail" aria-label="Showroom yolculuğu">
+  <a data-to="uretici" class="on"><span class="lbl">Üretici</span><span class="pip"></span><span class="idx">01</span></a>
+  <a data-to="teknoloji"><span class="lbl">Teknoloji</span><span class="pip"></span><span class="idx">02</span></a>
+  <a data-to="kalite"><span class="lbl">Kalite</span><span class="pip"></span><span class="idx">03</span></a>
+  <a data-to="proje"><span class="lbl">Proje</span><span class="pip"></span><span class="idx">04</span></a>
+  <a data-to="guven"><span class="lbl">Güven</span><span class="pip"></span><span class="idx">05</span></a>
+  <a data-to="teklif"><span class="lbl">Teklif</span><span class="pip"></span><span class="idx">06</span></a>
+</nav>
+
+<!-- ============ ACT 1 : ÜRETİCİ ============ -->
+<section class="act hero" id="uretici">
+  <div class="plane p-grid" data-depth="0.2"></div>
+  <div class="plane p-glow" data-depth="0.5"></div>
+  <div class="wrap hero-inner">
+    <div class="hero-copy">
+      <div class="station kick">Üretici · Afyonkarahisar</div>
+      <h1>Modern yapılar için <span class="hl">entegre çözümler.</span></h1>
+      <p class="hero-sub2">Binanın kabuğu, tek çatı altında.</p>
+      <div class="hero-actions">
+        <a href="#teknoloji" class="btn btn-primary">Showroom'a girin
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M12 5v14M6 13l6 6 6-6"/></svg>
+        </a>
+        <a href="#teklif" class="btn btn-ghost">Teklif Alın</a>
+      </div>
+    </div>
+    <div class="facade" aria-hidden="true">
+      <div class="ring">
+        <div class="grid2">
+          <div class="pane big"><span class="t">PVC Doğrama</span></div>
+          <div class="pane"><span class="t">Isıcam</span></div>
+          <div class="pane hot"><span class="t">Cephe</span></div>
+          <div class="pane"><span class="t">Alüminyum</span></div>
+          <div class="pane"><span class="t">Kapı</span></div>
+        </div>
+      </div>
+      <div class="float f1"><div class="n"><span>1.25M</span> m²</div><div class="l">yıllık ısıcam</div></div>
+      <div class="float f2"><div class="n">29.000 m²</div><div class="l">üretim tesisi</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="power" id="uretim-gucu">
+  <div class="wrap">
+    <div class="power-head rv"><span class="station">Üretim Gücümüz</span></div>
+    <div class="power-grid">
+      <div class="pcell rv">
+        <span class="pic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9V5a1 1 0 0 1 1-1h4M20 9V5a1 1 0 0 0-1-1h-4M4 15v4a1 1 0 0 0 1 1h4M20 15v4a1 1 0 0 1-1 1h-4"/></svg></span>
+        <div class="n" data-count="15000" data-suffix=" m²">15.000 m²</div>
+        <div class="l">Açık Alan</div>
+      </div>
+      <div class="pcell rv">
+        <span class="pic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21V8l9-4 9 4v13M3 21h18M8 21v-7h8v7"/></svg></span>
+        <div class="n" data-count="14000" data-suffix=" m²">14.000 m²</div>
+        <div class="l">Kapalı Alan</div>
+      </div>
+      <div class="pcell rv">
+        <span class="pic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="1"/><path d="M12 3v18M4 12h16"/></svg></span>
+        <div class="n" data-count="1000000" data-suffix=" mt">1.000.000 mt</div>
+        <div class="l">PVC Doğrama Kapasitesi</div>
+      </div>
+      <div class="pcell rv">
+        <span class="pic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="1"/><circle cx="15.2" cy="12" r="1" fill="currentColor" stroke="none"/></svg></span>
+        <div class="n" data-count="110" data-suffix=" Ton">110 Ton</div>
+        <div class="l">Alüminyum Doğrama</div>
+      </div>
+      <div class="pcell rv">
+        <span class="pic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="13" height="13" rx="1"/><path d="M8 7V4h13v13h-3"/></svg></span>
+        <div class="n" data-count="1250000" data-suffix=" m²">1.250.000 m²</div>
+        <div class="l">Isıcam Kapasitesi</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ACT 2 : TEKNOLOJİ (pinned cross-section) ============ -->
+<section class="act tech" id="teknoloji">
+  <div class="tech-pin">
+    <div class="wrap tech-grid">
+      <div class="tech-copy">
+        <div class="station">Teknoloji</div>
+        <h2>Yüzeyin altındaki <span style="color:var(--accent)">mühendislik</span>.</h2>
+        <p class="lead">Kaydırın: bitmiş pencerenin kesiti açılsın. Çok odacıklı Winsa profili, çelik takviye ve argon dolgulu düşük-E ısıcam; ısıyı içeride, sesi dışarıda tutar.</p>
+      </div>
+      <div class="cut" id="cut">
+        <svg viewBox="0 0 1000 690" preserveAspectRatio="xMidYMid meet" aria-label="Pencere kesiti">
+          <!-- finished pane (base layer) -->
+          <g id="finished">
+            <rect x="70" y="70" width="860" height="550" rx="10" fill="none" stroke="#D3D3CD" stroke-width="10"/>
+            <rect x="110" y="110" width="780" height="470" rx="4" fill="#5B9BA6" opacity="0.12"/>
+            <line x1="150" y1="150" x2="380" y2="150" stroke="#5B9BA6" stroke-width="6" opacity="0.4"/>
+            <line x1="150" y1="180" x2="300" y2="180" stroke="#5B9BA6" stroke-width="6" opacity="0.25"/>
+          </g>
+          <!-- cross-section detail (revealed by clip) -->
+          <g id="section">
+            <!-- PVC frame chambers -->
+            <rect x="90" y="90" width="250" height="510" rx="6" fill="#F1F1ED" stroke="#CFCFC8" stroke-width="2"/>
+            <g stroke="#DDDDD7" stroke-width="2" fill="#F8F8F5">
+              <rect x="110" y="120" width="90" height="120" rx="3"/>
+              <rect x="110" y="255" width="90" height="120" rx="3"/>
+              <rect x="110" y="390" width="90" height="120" rx="3"/>
+              <rect x="215" y="150" width="105" height="150" rx="3"/>
+              <rect x="215" y="320" width="105" height="190" rx="3"/>
+            </g>
+            <!-- steel reinforcement -->
+            <rect x="230" y="360" width="70" height="110" rx="3" fill="none" stroke="#E9640E" stroke-width="3" stroke-dasharray="6 5"/>
+            <!-- gaskets -->
+            <rect x="336" y="250" width="16" height="190" rx="4" fill="#E9640E" opacity="0.85"/>
+            <!-- glass unit: two panes + argon gap -->
+            <rect x="360" y="150" width="26" height="390" fill="#5B9BA6" opacity="0.55"/>
+            <rect x="470" y="150" width="26" height="390" fill="#5B9BA6" opacity="0.55"/>
+            <rect x="386" y="150" width="84" height="390" fill="#5B9BA6" opacity="0.12"/>
+            <rect x="386" y="150" width="84" height="390" fill="none" stroke="#DDDDD7" stroke-width="2"/>
+            <!-- low-E coating hint -->
+            <line x1="470" y1="150" x2="470" y2="540" stroke="#E9640E" stroke-width="3" opacity="0.8"/>
+          </g>
+        </svg>
+        <div class="cutline" id="cutline"></div>
+        <div class="clabel rv" id="lab1" style="left:6%;top:8%"><b>Çok odacıklı profil</b>Winsa PVC sistem</div>
+        <div class="clabel rv" id="lab2" style="left:20%;bottom:9%"><b>Çelik takviye</b>Statik dayanım</div>
+        <div class="clabel rv" id="lab3" style="left:40%;top:8%"><b>Argon dolgu</b>Isı yalıtımı</div>
+        <div class="clabel rv" id="lab4" style="right:6%;bottom:9%"><b>Düşük-E kaplama</b>Güneş kontrol</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ACT 3 : KALİTE ============ -->
+<section class="act quality sec" id="kalite">
+  <div class="wrap">
+    <div class="station rv">Kalite</div>
+    <h2 class="q-motto q-clip" id="motto" style="margin-top:18px">Başarımızın kaynağı <span class="hl">kalitemizden.</span></h2>
+    <div class="q-list">
+      <div class="q-item rv"><div class="k">Malzeme</div><h3>Kanıtlanmış sistemler</h3><p>Winsa PVC profilleri ve Şişecam Işıcam yalıtım camıyla üretim.</p></div>
+      <div class="q-item rv"><div class="k">Standart</div><h3>CE ve ürün standartları</h3><p>Ürünlerimiz ilgili standartlara ve CE gerekliliklerine uygun üretilir.</p></div>
+      <div class="q-item rv"><div class="k">Süreç</div><h3>Entegre üretim kontrolü</h3><p>Profil, cam ve montaj tek çatı altında; her aşama izlenebilir.</p></div>
+      <div class="q-item rv"><div class="k">Çevre</div><h3>Çevre dostu yaklaşım</h3><p>Enerji verimli ürünler ve sorumlu üretim anlayışı.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ACT 4 : PROJE (horizontal pan) ============ -->
+<section class="act projwrap" id="proje">
+  <div class="projtrack" id="ptrack">
+    <div class="pintro">
+      <div class="station rv">Proje</div>
+      <h2 class="head-xl rv" style="margin-top:16px">Ürettiğimiz her<br>açıklığın bir adresi var.</h2>
+      <p class="lead rv">Konut, ticari ve kamu projelerinde pencere, cephe ve cam uygulamaları. Gerçek proje görselleri bu alana yerleştirilecek.</p>
+    </div>
+    <div class="pcard"><div class="ph"></div><div class="glow"></div><span class="slot">Görsel yeri</span><span class="tag">Cephe</span><h3>Ticari bina giydirme cephe</h3><p>Alüminyum cephe sistemi</p></div>
+    <div class="pcard"><div class="ph"></div><span class="slot">Görsel yeri</span><span class="tag">Konut</span><h3>Konut projesi</h3><p>PVC doğrama + ısıcam</p></div>
+    <div class="pcard"><div class="ph"></div><span class="slot">Görsel yeri</span><span class="tag">Kamu</span><h3>Kamu yapısı</h3><p>Alüminyum + güvenlik camı</p></div>
+    <div class="pcard"><div class="ph"></div><span class="slot">Görsel yeri</span><span class="tag">Devam eden</span><h3>Karma kullanım</h3><p>Cam ve alüminyum</p></div>
+  </div>
+</section>
+
+<!-- ============ ACT 5 : GÜVEN ============ -->
+<section class="act trust sec" id="guven">
+  <div class="glow"></div>
+  <div class="wrap">
+    <div class="station rv">Güven</div>
+    <div class="tgrid">
+      <div>
+        <h2 class="export-h rv">Yurt içinde binlerce açıklık,<br><span class="hl">AFCAM markasıyla</span> yurt dışında.</h2>
+        <p class="lead rv">2001'den bu yana kesintisiz üretim, kanıtlanmış çözüm ortakları ve kendi montaj ekibimiz. İhracatta ürünlerimizi AFCAM markası altında dünyaya ulaştırıyoruz.</p>
+        <div class="tpoints rv">
+          <div class="tp"><span class="en">01</span><div><b>2001'den beri üretim</b><span>Yirmi yılı aşkın kesintisiz üretim tecrübesi.</span></div></div>
+          <div class="tp"><span class="en">02</span><div><b>AFCAM ile ihracat</b><span>Cam ve doğrama ürünlerinde yurt dışı sevkiyat.</span></div></div>
+          <div class="tp"><span class="en">03</span><div><b>Kendi montaj ekibi</b><span>Üretimden yerinde uygulamaya tek sorumluluk.</span></div></div>
+        </div>
+        <div class="partners rv">
+          <div class="pb"><div class="nm">Winsa</div><div class="ds">PVC profil sistemleri</div></div>
+          <div class="pb"><div class="nm">Işıcam</div><div class="ds">Yalıtım camı</div></div>
+          <div class="pb"><div class="nm">Önder Montaj</div><div class="ds">Yerinde uygulama</div></div>
+        </div>
+      </div>
+      <div class="afcam rv">
+        <div class="mk">AF<span>CAM</span></div>
+        <div class="sub">İhracat Markamız</div>
+        <p>Önder Group'un yurt dışına yönelik cam ve doğrama ürünleri AFCAM markasıyla üretilir ve sevk edilir. Proje bazlı üretim, ihracata uygun paketleme, tek elden tedarik.</p>
+        <div class="note">Hedef pazarlar ve ihracat referansları bu alana eklenecektir.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ ACT 6 : TEKLİF ============ -->
+<section class="act offer sec" id="teklif">
+  <div class="wrap">
+    <div class="station rv">Teklif</div>
+    <h2 class="head-xl rv" style="margin-top:16px">Yolculuğun sonu: <span style="color:var(--accent)">projeniz.</span></h2>
+    <p class="lead rv">Ölçü, adet ve ürün detaylarını paylaşın; ekibimiz en kısa sürede fiyat teklifiyle dönsün.</p>
+    <a id="waBtn" class="btn wa-btn rv" href="https://wa.me/905324624199?text=Merhaba%20%C3%96nder%20Group%2C%20%C3%BCr%C3%BCn%20baz%C4%B1%20fiyat%20teklifi%20almak%20istiyorum." target="_blank" rel="noopener" style="margin-top:22px">
+      <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.47 0 1.46 1.06 2.87 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35zM12.05 2.5a9.5 9.5 0 0 0-8.14 14.36L2.5 21.5l4.77-1.25a9.5 9.5 0 1 0 4.78-17.75z"/></svg>
+      WhatsApp'tan ürün bazlı fiyat iste
+    </a>
+    <div class="ogrid">
+      <div class="cinfo rv">
+        <div class="row"><div class="k">Showroom</div><div class="v">Gazlıgöl Cad. No:84/A<small>Afyonkarahisar</small></div></div>
+        <div class="row"><div class="k">Fabrika</div><div class="v">Org. San. Böl. 2. Cad. 13. Sk.<small>Afyonkarahisar</small></div></div>
+        <div class="row"><div class="k">Telefon</div><div class="v">0 (272) 213 05 59</div></div>
+        <div class="row"><div class="k">Faks</div><div class="v">0 (272) 213 78 16</div></div>
+        <div class="row"><div class="k">E-posta</div><div class="v">info@onderyapi.com.tr</div></div>
+      </div>
+      <form id="quoteForm" class="rv" novalidate>
+        <div class="f-fields">
+          <div class="f-row">
+            <div><label for="ad">Ad Soyad / Firma</label><input class="field" id="ad" type="text" placeholder="Adınız veya firmanız" required></div>
+            <div><label for="tel">Telefon</label><input class="field" id="tel" type="tel" placeholder="0 (5..)" required></div>
+          </div>
+          <label for="eposta">E-posta</label>
+          <input class="field" id="eposta" type="email" placeholder="ornek@firma.com" required>
+          <label for="urun">Ürün</label>
+          <select class="field" id="urun">
+            <option>PVC Doğrama (Winsa)</option>
+            <option>Isıcam / Cam</option>
+            <option>Alüminyum Cephe / Kapı / Pencere</option>
+            <option>İhracat (AFCAM)</option>
+            <option>Diğer / Emin değilim</option>
+          </select>
+          <label for="mesaj">Proje Detayı</label>
+          <textarea class="field" id="mesaj" placeholder="Ölçü, adet, konum ve varsa çizim bilgisi..."></textarea>
+          <button type="submit" class="btn btn-primary">Teklif Talebi Gönder
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <p class="f-note">Bu form demo amaçlıdır; gönderim henüz bir sunucuya iletilmez.</p>
+        </div>
+        <div class="f-ok" id="formOk">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.5 2.5L16 9"/></svg>
+          <h3>Talebiniz alındı</h3>
+          <p>Teşekkürler. Ekibimiz en kısa sürede sizinle iletişime geçecek.</p>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>
+
+<a id="waFloat" class="wa-float" href="https://wa.me/905324624199?text=Merhaba%20%C3%96nder%20Group%2C%20%C3%BCr%C3%BCn%20baz%C4%B1%20fiyat%20teklifi%20almak%20istiyorum." target="_blank" rel="noopener" aria-label="WhatsApp ile ürün bazlı fiyat iste">
+  <span class="ping"></span>
+  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M17.5 14.38c-.3-.15-1.76-.87-2.03-.97-.27-.1-.47-.15-.67.15-.2.3-.77.97-.94 1.16-.17.2-.35.22-.65.07-.3-.15-1.26-.46-2.4-1.48-.89-.79-1.49-1.77-1.66-2.07-.17-.3-.02-.46.13-.61.13-.13.3-.35.45-.52.15-.17.2-.3.3-.5.1-.2.05-.37-.02-.52-.08-.15-.67-1.61-.92-2.21-.24-.58-.49-.5-.67-.51h-.57c-.2 0-.52.07-.79.37-.27.3-1.04 1.01-1.04 2.47 0 1.46 1.06 2.87 1.21 3.07.15.2 2.1 3.2 5.08 4.49.71.31 1.26.49 1.69.62.71.23 1.36.2 1.87.12.57-.09 1.76-.72 2-1.41.25-.69.25-1.28.17-1.41-.07-.13-.27-.2-.57-.35zM12.05 2.5a9.5 9.5 0 0 0-8.14 14.36L2.5 21.5l4.77-1.25a9.5 9.5 0 1 0 4.78-17.75z"/></svg>
+</a>
+<footer>
+  <div class="wrap foot">
+    <span class="wm" style="font-family:var(--f-display);font-weight:900;font-size:1.3rem"><span style="color:var(--accent)">önder</span>group</span>
+    <span class="mono">© 2026 Önder Group · Önder Yapı · Afyonkarahisar</span>
+    <span class="mono">info@onderyapi.com.tr · 0 (272) 213 05 59</span>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var reduce=window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var header=document.getElementById("header");
+  window.addEventListener("scroll",function(){header.classList.toggle("solid",window.scrollY>40);},{passive:true});
+
+  // WhatsApp: product-based price request
+  var waNum="905324624199";
+  function waHref(p){var m=p?("Merhaba Önder Group, "+p+" için ürün bazlı fiyat teklifi almak istiyorum."):"Merhaba Önder Group, ürün bazlı fiyat teklifi almak istiyorum.";return "https://wa.me/"+waNum+"?text="+encodeURIComponent(m);}
+  var waBtn=document.getElementById("waBtn"),waFloat=document.getElementById("waFloat"),urunSel=document.getElementById("urun");
+  function updateWa(){if(waBtn)waBtn.href=waHref(urunSel?urunSel.value:"");if(waFloat)waFloat.href=waHref("");}
+  if(urunSel)urunSel.addEventListener("change",updateWa);
+  updateWa();
+
+  // journey rail nav + active state
+  var rail=document.getElementById("rail");
+  rail.querySelectorAll("a").forEach(function(a){
+    a.addEventListener("click",function(){var t=document.getElementById(a.getAttribute("data-to"));if(t)t.scrollIntoView({behavior:reduce?"auto":"smooth"});});
+  });
+  var acts=["uretici","teknoloji","kalite","proje","guven","teklif"];
+  var railLinks=rail.querySelectorAll("a");
+  function setActive(i){railLinks.forEach(function(l,j){l.classList.toggle("on",j===i);});}
+
+  // mobile progress
+  var mprog=document.getElementById("mprog");
+  window.addEventListener("scroll",function(){
+    var h=document.documentElement.scrollHeight-window.innerHeight;
+    mprog.style.width=(h>0?(window.scrollY/h*100):0)+"%";
+  },{passive:true});
+
+  // counters
+  function fmt(n){return n.toLocaleString("tr-TR");}
+  function runCounts(scope){
+    (scope||document).querySelectorAll(".n[data-count]").forEach(function(el){
+      if(el.dataset.done)return;el.dataset.done="1";
+      var target=+el.getAttribute("data-count"),suf=el.getAttribute("data-suffix")||"";
+      if(target<=2001&&!suf){el.textContent=target;return;}
+      var t0=null;function step(ts){if(!t0)t0=ts;var p=Math.min((ts-t0)/1300,1);var e=1-Math.pow(1-p,3);el.textContent=fmt(Math.round(target*e))+suf;if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);
+    });
+  }
+
+  if(!window.gsap||!window.ScrollTrigger||reduce){
+    // static fallback: everything visible
+    document.querySelectorAll(".clabel").forEach(function(l){l.style.opacity=1;});
+    var cl=document.getElementById("cutline");if(cl)cl.style.display="none";
+    var m=document.getElementById("motto");if(m)m.style.clipPath="none";
+    runCounts();
+    // simple active tracking
+    if("IntersectionObserver" in window){
+      var io=new IntersectionObserver(function(en){en.forEach(function(e){if(e.isIntersecting){var i=acts.indexOf(e.target.id);if(i>-1)setActive(i);}});},{rootMargin:"-45% 0px -50% 0px"});
+      acts.forEach(function(id){var s=document.getElementById(id);if(s)io.observe(s);});
+    }
+    return;
+  }
+
+  gsap.registerPlugin(ScrollTrigger);
+  document.body.classList.add("sc");
+
+  // active rail per act
+  acts.forEach(function(id,i){
+    ScrollTrigger.create({trigger:"#"+id,start:"top 55%",end:"bottom 45%",onToggle:function(self){if(self.isActive)setActive(i);}});
+  });
+
+  // generic reveals
+  gsap.utils.toArray(".rv").forEach(function(el){
+    if(el.closest("#teknoloji")||el.closest("#proje"))return; // handled by their own timelines
+    gsap.fromTo(el,{y:26,opacity:0},{y:0,opacity:1,duration:.7,ease:"power2.out",scrollTrigger:{trigger:el,start:"top 88%"}});
+  });
+
+  // ACT1 hero parallax
+  var mm=gsap.matchMedia();
+  mm.add("(min-width:901px)",function(){
+    document.querySelectorAll(".hero .plane").forEach(function(pl){
+      var d=parseFloat(pl.getAttribute("data-depth"))||.3;
+      gsap.to(pl,{yPercent:d*30,ease:"none",scrollTrigger:{trigger:"#uretici",start:"top top",end:"bottom top",scrub:true}});
+    });
+    gsap.to(".facade .ring",{yPercent:-8,ease:"none",scrollTrigger:{trigger:"#uretici",start:"top top",end:"bottom top",scrub:true}});
+    gsap.to(".facade .f1",{yPercent:-40,ease:"none",scrollTrigger:{trigger:"#uretici",start:"top top",end:"bottom top",scrub:1}});
+    gsap.to(".facade .f2",{yPercent:34,ease:"none",scrollTrigger:{trigger:"#uretici",start:"top top",end:"bottom top",scrub:1}});
+
+    // ACT2 pinned cross-section (SIGNATURE MOVE / PEAK)
+    var secG=document.getElementById("section");
+    var cutline=document.getElementById("cutline");
+    gsap.set("#section",{clipPath:"inset(0 100% 0 0)"});
+    gsap.set(["#lab1","#lab2","#lab3","#lab4"],{opacity:0,y:12});
+    var tl=gsap.timeline({scrollTrigger:{trigger:"#teknoloji",start:"top top",end:"+=1800",pin:".tech-pin",scrub:1}});
+    tl.to("#section",{clipPath:"inset(0 0% 0 0)",ease:"none",duration:1},0)
+      .fromTo(cutline,{left:"6%"},{left:"78%",ease:"none",duration:1},0)
+      .to("#lab1",{opacity:1,y:0,duration:.18},0.12)
+      .to("#lab2",{opacity:1,y:0,duration:.18},0.34)
+      .to("#lab3",{opacity:1,y:0,duration:.18},0.56)
+      .to("#lab4",{opacity:1,y:0,duration:.18},0.8)
+      .to(cutline,{opacity:0,duration:.15},0.92);
+
+    // ACT4 horizontal pan
+    var track=document.getElementById("ptrack");
+    var dist=track.scrollWidth-window.innerWidth+40;
+    if(dist>0){
+      gsap.to(track,{x:-dist,ease:"none",scrollTrigger:{trigger:"#proje",start:"top top",end:"+="+dist,pin:true,scrub:1,invalidateOnRefresh:true}});
+    }
+  });
+
+  // ACT3 motto clip reveal
+  gsap.to("#motto",{clipPath:"inset(0 0% 0 0)",ease:"power2.out",duration:1,scrollTrigger:{trigger:"#motto",start:"top 80%"}});
+
+  // counters when proof enters
+  ScrollTrigger.create({trigger:".power",start:"top 82%",once:true,onEnter:function(){runCounts(document.querySelector(".power"));}});
+})();
+</script>
