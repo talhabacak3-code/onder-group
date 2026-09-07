@@ -188,6 +188,13 @@ body.sc .rv{opacity:0}
 .cinfo .k{font-family:var(--f-mono);font-size:.68rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding-top:3px}
 .cinfo .v{color:var(--ink)}
 .cinfo .v small{display:block;color:var(--muted);font-size:.82rem;margin-top:3px}
+.mapwrap{position:relative;grid-column:1 / -1;margin-top:14px;border-radius:12px;overflow:hidden;border:1px solid var(--line-2);height:154px;background:var(--surface-2)}
+.minimap{width:100%;height:100%;border:0;display:block;pointer-events:none;filter:grayscale(.12)}
+.maplink{position:absolute;inset:0;display:flex;align-items:flex-end;padding:12px;text-decoration:none;background:linear-gradient(to top,rgba(20,20,16,.30),transparent 52%);transition:background .2s}
+.maplink:hover{background:linear-gradient(to top,rgba(20,20,16,.42),transparent 60%)}
+.maplink .cta{display:inline-flex;align-items:center;gap:7px;background:var(--accent);color:#fff;font-weight:700;font-size:.82rem;padding:9px 14px;border-radius:9px;box-shadow:0 8px 18px -8px var(--accent)}
+.maplink:hover .cta{background:var(--accent-2)}
+.maplink .cta svg{width:15px;height:15px}
 form{background:var(--surface);border:1px solid var(--line-2);border-radius:20px;padding:32px}
 .f-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
 label{display:block;font-size:.82rem;font-weight:700;margin:16px 0 7px;color:var(--ink-soft)}
@@ -434,8 +441,26 @@ footer{border-top:1px solid var(--line);background:var(--surface);padding:44px 0
     </a>
     <div class="ogrid">
       <div class="cinfo rv">
-        <div class="row"><div class="k">Showroom</div><div class="v">Gazlıgöl Cad. No:84/A<small>Afyonkarahisar</small></div></div>
-        <div class="row"><div class="k">Fabrika</div><div class="v">Org. San. Böl. 2. Cad. 13. Sk.<small>Afyonkarahisar</small></div></div>
+        <div class="row">
+          <div class="k">Showroom</div>
+          <div class="v">Gazlıgöl Cad. No:84/A<small>Afyonkarahisar</small></div>
+          <div class="mapwrap">
+            <iframe class="minimap" src="https://maps.google.com/maps?q=%C3%96nder%20Yap%C4%B1%20Gazl%C4%B1g%C3%B6l%20Cad.%20No%3A84%2FA%20Afyonkarahisar&amp;z=15&amp;hl=tr&amp;output=embed" loading="lazy" title="Showroom konumu" tabindex="-1"></iframe>
+            <a class="maplink" href="https://www.google.com/maps/dir/?api=1&amp;destination=%C3%96nder%20Yap%C4%B1%20Gazl%C4%B1g%C3%B6l%20Cad.%20No%3A84%2FA%20Afyonkarahisar" target="_blank" rel="noopener" aria-label="Showroom için yol tarifi al">
+              <span class="cta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>Yol Tarifi Al</span>
+            </a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="k">Fabrika</div>
+          <div class="v">Org. San. Böl. 2. Cad. 13. Sk.<small>Afyonkarahisar</small></div>
+          <div class="mapwrap">
+            <iframe class="minimap" src="https://maps.google.com/maps?q=%C3%96nder%20Yap%C4%B1%20Organize%20Sanayi%20B%C3%B6lgesi%202.%20Cadde%2013.%20Sokak%20Afyonkarahisar&amp;z=15&amp;hl=tr&amp;output=embed" loading="lazy" title="Fabrika konumu" tabindex="-1"></iframe>
+            <a class="maplink" href="https://www.google.com/maps/dir/?api=1&amp;destination=%C3%96nder%20Yap%C4%B1%20Organize%20Sanayi%20B%C3%B6lgesi%202.%20Cadde%2013.%20Sokak%20Afyonkarahisar" target="_blank" rel="noopener" aria-label="Fabrika için yol tarifi al">
+              <span class="cta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="3 11 22 2 13 21 11 13 3 11"/></svg>Yol Tarifi Al</span>
+            </a>
+          </div>
+        </div>
         <div class="row"><div class="k">Telefon</div><div class="v">0 (272) 213 05 59</div></div>
         <div class="row"><div class="k">Faks</div><div class="v">0 (272) 213 78 16</div></div>
         <div class="row"><div class="k">E-posta</div><div class="v">info@onderyapi.com.tr</div></div>
