@@ -55,17 +55,14 @@ header.solid{background:color-mix(in srgb,var(--canvas) 88%,transparent);backdro
 .brand .tg{font-family:var(--f-mono);font-size:.5rem;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 header .cta{margin-left:auto}
 
-/* ===== JOURNEY RAIL ===== */
-.rail{position:fixed;top:50%;right:26px;transform:translateY(-50%);z-index:75;display:flex;flex-direction:column;gap:2px}
-.rail a{display:flex;align-items:center;gap:12px;justify-content:flex-end;padding:7px 0;color:var(--muted);cursor:pointer;transition:color .25s}
-.rail a .lbl{font-family:var(--f-mono);font-size:.64rem;letter-spacing:.16em;text-transform:uppercase;opacity:0;transform:translateX(6px);transition:opacity .25s,transform .25s}
-.rail a .pip{width:26px;height:2px;background:var(--line-2);border-radius:2px;transition:background .25s,width .25s}
-.rail a:hover .lbl{opacity:1;transform:none}
-.rail a.on{color:var(--ink)}
-.rail a.on .lbl{opacity:1;transform:none}
-.rail a.on .pip{background:var(--accent);width:40px}
-.rail .idx{font-family:var(--f-mono);font-size:.6rem;color:var(--muted);width:16px;text-align:right}
-.rail a.on .idx{color:var(--accent)}
+/* ===== JOURNEY STEPPER (header) ===== */
+.steps-nav{flex:1;display:flex;justify-content:center;gap:26px}
+.steps-nav a{position:relative;font-family:var(--f-mono);font-size:.7rem;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);font-weight:500;padding:9px 2px;cursor:pointer;transition:color .2s}
+.steps-nav a::after{content:"";position:absolute;left:0;right:0;bottom:2px;height:2px;background:var(--accent);transform:scaleX(0);transition:transform .28s}
+.steps-nav a:hover{color:var(--ink)}
+.steps-nav a.on{color:var(--ink)}
+.steps-nav a.on::after{transform:scaleX(1)}
+@media (max-width:1080px){.steps-nav{display:none}}
 
 /* ===== ACT SHELL ===== */
 .act{position:relative}
@@ -234,7 +231,7 @@ footer{border-top:1px solid var(--line);background:var(--surface);padding:44px 0
   .power-grid{grid-template-columns:1fr 1fr;gap:24px 18px}
   .cinfo .row{grid-template-columns:1fr;gap:3px}
 }
-.mobile-progress{display:none}
+.mobile-progress{display:block;position:fixed;top:0;left:0;height:3px;background:var(--accent);z-index:100;width:0;transition:width .12s linear}
 @media (max-width:900px){
   .mobile-progress{display:block;position:fixed;top:0;left:0;height:3px;background:var(--accent);z-index:90;width:0}
 }
@@ -253,17 +250,17 @@ footer{border-top:1px solid var(--line);background:var(--surface);padding:44px 0
     <span class="wm"><span class="o">önder</span><span class="g">group</span></span>
     <span class="tg">Başarımızın Kaynağı Kalitemizden</span>
   </a>
+  <nav class="steps-nav" id="steps" aria-label="Showroom yolculuğu">
+    <a data-to="uretici" class="on">Üretici</a>
+    <a data-to="teknoloji">Teknoloji</a>
+    <a data-to="kalite">Kalite</a>
+    <a data-to="proje">Proje</a>
+    <a data-to="guven">Güven</a>
+    <a data-to="teklif">Teklif</a>
+  </nav>
   <a href="#teklif" class="btn btn-primary cta">Teklif Alın</a>
 </header>
 
-<nav class="rail" id="rail" aria-label="Showroom yolculuğu">
-  <a data-to="uretici" class="on"><span class="lbl">Üretici</span><span class="pip"></span><span class="idx">01</span></a>
-  <a data-to="teknoloji"><span class="lbl">Teknoloji</span><span class="pip"></span><span class="idx">02</span></a>
-  <a data-to="kalite"><span class="lbl">Kalite</span><span class="pip"></span><span class="idx">03</span></a>
-  <a data-to="proje"><span class="lbl">Proje</span><span class="pip"></span><span class="idx">04</span></a>
-  <a data-to="guven"><span class="lbl">Güven</span><span class="pip"></span><span class="idx">05</span></a>
-  <a data-to="teklif"><span class="lbl">Teklif</span><span class="pip"></span><span class="idx">06</span></a>
-</nav>
 
 <!-- ============ ACT 1 : ÜRETİCİ ============ -->
 <section class="act hero" id="uretici">
@@ -526,12 +523,12 @@ footer{border-top:1px solid var(--line);background:var(--surface);padding:44px 0
   updateWa();
 
   // journey rail nav + active state
-  var rail=document.getElementById("rail");
-  rail.querySelectorAll("a").forEach(function(a){
+  var steps=document.getElementById("steps");
+  steps.querySelectorAll("a").forEach(function(a){
     a.addEventListener("click",function(){var t=document.getElementById(a.getAttribute("data-to"));if(t)t.scrollIntoView({behavior:reduce?"auto":"smooth"});});
   });
   var acts=["uretici","teknoloji","kalite","proje","guven","teklif"];
-  var railLinks=rail.querySelectorAll("a");
+  var railLinks=steps.querySelectorAll("a");
   function setActive(i){railLinks.forEach(function(l,j){l.classList.toggle("on",j===i);});}
 
   // mobile progress
